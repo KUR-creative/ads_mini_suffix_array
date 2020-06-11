@@ -56,10 +56,10 @@ def suffix_array(imap, string):
     #print('   rs:',rs)
     
     #[2] Get (flawed) s1+s2 suffix array. ordered by (flawed) rank
-    # It can't be SA if some elems are duplicated.
-    # Because it can't allow duplicated elem.. 
     s12_sa = sorted(s1s2, key=lambda i: rs[i:i+3])
     #print('s12_sa:', s12_sa)
+    # It could be incorrect SA if some elems are duplicated.
+    # Because it can't allow duplicated elem.. 
 
     #[3] Check uniqueness of elems and get rank ordered by s12_sa
     all_unique = True
@@ -72,16 +72,19 @@ def suffix_array(imap, string):
         else:
             rank += 1
         s12_rank.append(rank)
-    #print('all_unique:', all_unique)
-    #print(s12_rank)
     
     #[4] Get rank and SA (s1-s2 ordered) if all elems are unique
     s12_sa2rank = dict(zip(s12_sa, s12_rank))
+    #print(string, list(unzip(s12_sa2rank.items())))
     if not all_unique:
         #[4.1] Get rank from recur call.
         next_string = F.lmap(s12_sa2rank, s1s2)
         next_imap = int_map(set(next_string))
-        s12_rank = suffix_array(next_imap, next_string)
+        s12_rank = F.lmap(F.first, sorted(
+            enumerate(suffix_array(next_imap, next_string)),
+            key=tup(lambda r,sa: sa)
+        ))
+        print('recur result:', s12_rank)
         
         # Change s12_sa2rank, s12_sa
         s12_sa2rank = dict(zip(s1s2, s12_rank))
@@ -89,8 +92,6 @@ def suffix_array(imap, string):
             s12_sa2rank.items(),
             key=tup(lambda sa, rank: rank)
         ))
-        #print('s12_sa:', s12_sa)
-        #print('s12_sa2rank:', s12_sa2rank)
         
     s0_sa = sorted(
         unsorted_s0idx,
@@ -137,7 +138,12 @@ string = 'aa$'
 string = 'aaa$'
 #imap = int_map('ac$'); string = 'aac$'
 #string = 'aababa$'
-imap = int_map('acgt$'); string = 'acccc$'
+#imap = int_map('acgt$'); string = 'acccc$'
+imap = int_map('ac$'); string='aaccccc$'
 
+print('actual:', suffix_array(imap, string))
+print('expect:', [x for x,_ in naive_suffix_map(string)])
+
+string = [1,3,0,3,2]; imap = int_map(set(string))
 print('actual:', suffix_array(imap, string))
 print('expect:', [x for x,_ in naive_suffix_map(string)])
