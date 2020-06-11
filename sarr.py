@@ -9,10 +9,14 @@ def window(seq, n=2):
     it = iter(seq)
     result = tuple(I.islice(it, n))
     if len(result) == n:
-        yield ''.join(result)
+        #yield ''.join(result)
+        yield result
     for elem in it:
         result = result[1:] + (elem,)
-        yield ''.join(result)
+        #yield ''.join(result)
+        yield result
+print(list(window([1,2,3,4,5])))
+exit()
         
 def uniques(string, size, search_mode=False):
     qstrs = list(window(string, size))
@@ -120,3 +124,4 @@ pprint(suffix_arr('aababa$'))
 
 print('---- baabaabbaa$ ----')
 pprint(suffix_arr('baabaabbaa$'))
+print([x for x,_ in suffix_arr('aababa$')])
