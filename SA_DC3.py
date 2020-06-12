@@ -1,4 +1,3 @@
-from bidict import bidict
 import itertools as I
 
 #-------------------- utility functions ----------------------
@@ -30,10 +29,9 @@ def suffix_seq(s):
         yield s[i:]
 
 def naive_suffix_map(s):
-    sorted_suffixes = sorted(
+    return sorted(
         enumerate(suffix_seq(s)),
         key=tup(lambda i,k: [k,i]))
-    return sorted_suffixes
 
 #---------------------- DC3 implementation ---------------------
 def int_map(alphabet):
@@ -117,8 +115,7 @@ def suffix_array(imap, string):
         elif form12 > form0:
             suff_arr.append(beg0)
             i0 += 1
-        else:
-            assert False, 'Do not reach'
+        else: assert False, 'Do not reach'
         # If cursor reaches end of s1s2/s0, append last s0/s1s2
         if i0 == len_s0:
             suff_arr = suff_arr + s12_sa[i12:]
@@ -128,20 +125,3 @@ def suffix_array(imap, string):
             break
         
     return suff_arr
-    
-'''
-imap = int_map('ab$')
-string = 'aa$'
-string = 'aaa$'
-#imap = int_map('ac$'); string = 'aac$'
-#string = 'aababa$'
-#imap = int_map('acgt$'); string = 'acccc$'
-imap = int_map('ac$'); string='aaccccc$'
-
-print('actual:', suffix_array(imap, string))
-print('expect:', [x for x,_ in naive_suffix_map(string)])
-
-string = [1,3,0,3,2]; imap = int_map(set(string))
-print('actual:', suffix_array(imap, string))
-print('expect:', [x for x,_ in naive_suffix_map(string)])
-'''

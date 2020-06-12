@@ -1,6 +1,4 @@
-'''
-Experiments for correctness and time complexity
-'''
+''' Experiments for correctness and time complexity '''
 import random
 from time import time
 
@@ -9,9 +7,6 @@ import matplotlib.pyplot as plt
 
 from SA_DC3 import *
 
-
-alphabet = 'acgt'
-#print(''.join(random.choices(alphabet, k=6)))
 
 # Check special cases
 def assert_eq_with_naive(s, msg, fast_algo=suffix_array):
@@ -38,6 +33,7 @@ max_N = 200000
 step = 5000
 overturn_N = None
 overturn_idx = None
+alphabet = 'acgt'
 for N in tqdm(range(min_N, max_N, step)):
     Ns.append(N)
     s = ''.join(random.choices(alphabet, k=N)) + '$'

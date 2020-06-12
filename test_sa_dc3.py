@@ -1,6 +1,7 @@
-from SA_DC3 import *
 from hypothesis import given, example
 from hypothesis import strategies as st
+
+from SA_DC3 import *
 
 @given(st.text('atgc', min_size=1).map(lambda s: s + '$'))
 def test_dc3(s):
